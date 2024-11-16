@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sinceDateInput = document.getElementById('since-date');
     const untilDateInput = document.getElementById('until-date');
     const languageSelect = document.getElementById('language');
+    const geocodeInput = document.getElementById('geocode'); // Geocode field added
 
     // Filter checkboxes
     const filterLinksCheckbox = document.getElementById('filter-links');
@@ -116,6 +117,11 @@ document.addEventListener('DOMContentLoaded', function () {
             queryParts.push(`lang:${languageSelect.value}`);
         }
 
+        // Geocode
+        if (geocodeInput.value.trim() !== '') {
+            queryParts.push(`geocode:${geocodeInput.value.trim()}`);
+        }
+
         // Filters
         if (filterLinksCheckbox.checked) {
             queryParts.push('filter:links');
@@ -171,6 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sinceDateInput,
         untilDateInput,
         languageSelect,
+        geocodeInput, // Geocode added here
         filterLinksCheckbox,
         filterImagesCheckbox,
         filterMediaCheckbox,
@@ -196,19 +203,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to save the current search
     const saveCurrentSearch = () => {
-        // Auto-generate query name based on the query string
         const queryString = queryStringElement.textContent.trim();
-        let queryName = '';
-
-        if (queryString.length <= 17) {
-            // If the query is short, use it as the name directly
-            queryName = queryString;
-        } else {
-            // Use the first 10 and last 7 characters of the query
-            const firstTenChars = queryString.substring(0, 10);
-            const lastSevenChars = queryString.substring(queryString.length - 7);
-            queryName = `${firstTenChars}...${lastSevenChars}`;
-        }
+        let queryName = queryString.length <= 17 ? queryString : `${queryString.substring(0, 10)}...${queryString.substring(queryString.length - 7)}`;
 
         const searchParameters = {
             allWords: allWordsInput.value.trim(),
@@ -222,6 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
             sinceDate: sinceDateInput.value,
             untilDate: untilDateInput.value,
             language: languageSelect.value,
+            geocode: geocodeInput.value.trim(), // Save geocode
             filters: {
                 filterLinks: filterLinksCheckbox.checked,
                 filterImages: filterImagesCheckbox.checked,
@@ -281,6 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sinceDateInput.value = params.sinceDate;
         untilDateInput.value = params.untilDate;
         languageSelect.value = params.language;
+        geocodeInput.value = params.geocode || ''; // Load geocode value
 
         filterLinksCheckbox.checked = params.filters.filterLinks;
         filterImagesCheckbox.checked = params.filters.filterImages;
