@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sinceDateInput.value = params.sinceDate;
         untilDateInput.value = params.untilDate;
         languageSelect.value = params.language;
-        geocodeInput.value = params.geocode || ''; // Load geocode value
+        geocodeInput.value = params.geocode;
 
         filterLinksCheckbox.checked = params.filters.filterLinks;
         filterImagesCheckbox.checked = params.filters.filterImages;
