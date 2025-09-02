@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const sinceDateInput = document.getElementById('since-date');
     const untilDateInput = document.getElementById('until-date');
     const languageSelect = document.getElementById('language');
-    const geocodeInput = document.getElementById('geocode');
 
     const filterLinksCheckbox = document.getElementById('filter-links');
     const filterImagesCheckbox = document.getElementById('filter-images');
@@ -33,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const savedSearchesList = document.getElementById('saved-searches-list');
 
     const dateError = document.getElementById('date-error');
-    const geocodeError = document.getElementById('geocode-error');
     const hashtagsError = document.getElementById('hashtags-error');
 
     const sanitizeInput = (str) => str.replace(/[^a-zA-Z0-9_@#:\-.,\s]/g, '');
@@ -43,10 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return value.split(/\s+/).every(tag => /^#?\w+$/.test(tag));
     };
 
-    const validateGeocode = (value) => {
-        if (value.trim() === '') return true;
-        return /^-?\d{1,3}\.\d+,-?\d{1,3}\.\d+,(\d+(\.\d+)?)(mi|km)$/.test(value.trim());
-    };
 
     const validateDates = () => {
         if (sinceDateInput.value && untilDateInput.value) {
@@ -82,15 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (languageSelect.value !== '') queryParts.push(`lang:${languageSelect.value}`);
 
-        if (geocodeInput.value.trim() !== '') {
-            if (validateGeocode(geocodeInput.value.trim())) {
-                queryParts.push(`geocode:${geocodeInput.value.trim()}`);
-                geocodeError.textContent = '';
-            } else {
-                geocodeError.textContent = 'Invalid geocode format';
-            }
-        }
-
         if (filterLinksCheckbox.checked) queryParts.push('filter:links');
         if (filterImagesCheckbox.checked) queryParts.push('filter:images');
         if (filterMediaCheckbox.checked) queryParts.push('filter:media');
@@ -123,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
             sinceDate: sinceDateInput.value,
             untilDate: untilDateInput.value,
             language: languageSelect.value,
-            geocode: geocodeInput.value.trim(),
             filters: {
                 filterLinks: filterLinksCheckbox.checked,
                 filterImages: filterImagesCheckbox.checked,
@@ -177,7 +161,6 @@ document.addEventListener('DOMContentLoaded', function () {
         sinceDateInput.value = params.sinceDate;
         untilDateInput.value = params.untilDate;
         languageSelect.value = params.language;
-        geocodeInput.value = params.geocode;
 
         filterLinksCheckbox.checked = params.filters.filterLinks;
         filterImagesCheckbox.checked = params.filters.filterImages;
@@ -196,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const inputElements = [
         allWordsInput, exactPhraseInput, anyWordsInput, noneWordsInput, hashtagsInput,
         fromAccountsInput, toAccountsInput, mentionAccountsInput,
-        sinceDateInput, untilDateInput, languageSelect, geocodeInput,
+        sinceDateInput, untilDateInput, languageSelect,
         filterLinksCheckbox, filterImagesCheckbox, filterMediaCheckbox,
         excludeRepliesCheckbox, excludeRetweetsCheckbox, filterNativeVideoCheckbox,
         minRetweetsInput, minLikesInput, minRepliesInput
